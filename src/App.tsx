@@ -1,14 +1,23 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import { useAccount } from '@puzzlehq/sdk';
+import { useConnect, useAccount } from '@puzzlehq/sdk';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
 function App() {
+  const { connect, data, error, loading } = useConnect();
   const { account } = useAccount();
   const queryClient = new QueryClient();
-  const wallet = () => {
-    console.log(account);
+  const wallet = async () => {
+    try {
+      await connect();
+    }
+    catch (err){
+      console.log(err);
+    }
+    
+    console.log(data);
+    console.log(account.address);
   }
   return (
     <div className="App">
