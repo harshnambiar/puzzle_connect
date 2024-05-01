@@ -3,8 +3,10 @@ import logo from './logo.svg';
 import './App.css';
 import { useConnect, useAccount, useBalance, RecordsFilter, useRecords } from '@puzzlehq/sdk';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { useState } from 'react';
 
 function App() {
+  const [addr, setAddr] = useState<string | ''>();
   type UseRecordsParams = {
     address?: string;
     multisig?: boolean;
@@ -17,8 +19,10 @@ function App() {
   }
   const { connect, data, error, loading } = useConnect();
   const { account } = useAccount();
+  
+
   const { balances } = useBalance({
-    address: account.address.toString(),
+    address: addr,
     multisig: true
   });
   const { records } = useRecords({filter});
@@ -26,13 +30,16 @@ function App() {
   const wallet = async () => {
     try {
       await connect();
+      console.log(data);
+      console.log(account.address);
+      setAddr(account.address.toString());
     }
     catch (err){
       console.log(err);
+      console.log('no address');
     }
     
-    console.log(data);
-    console.log(account.address);
+    
   }
 
 
@@ -71,9 +78,9 @@ function App() {
             Puzzle Connect
           </a>
           <br/>
-          <a onClick={wallet}> What's the Wallet Address? </a>
-          <a onClick={Bal}> How much balance? </a>
-          <a onClick={Records}> What are my records like? </a>
+          <a onClick={wallet} style={{"cursor":'pointer'}}> What's the Wallet Address? </a>
+          <a onClick={Bal} style={{"cursor":'pointer'}}> How much balance? </a>
+          <a onClick={Records} style={{"cursor":'pointer'}}> What are my records like? </a>
         </header>
       </QueryClientProvider>
     </div>
