@@ -1,10 +1,8 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import { useConnect, useAccount, useBalance, RecordsFilter, useRecords, EventsFilter } from '@puzzlehq/sdk';
-import { requestCreateEvent, GetEventsResponse, getEvents } from '@puzzlehq/sdk-core';
+import { useConnect, useAccount, useBalance, RecordsFilter, useRecords, EventsFilter, requestCreateEvent, GetEventsResponse, getEvents } from '@puzzlehq/sdk';
 import { EventType } from '@puzzlehq/types';
-import { QueryClient, QueryClientProvider } from 'react-query';
 import { useState } from 'react';
 
 function App() {
@@ -25,20 +23,18 @@ function App() {
     functionId: 'create_code'
   }
   
- 
   const { connect, data, error, loading } = useConnect();
   const { account } = useAccount();
-  
+  const isConnected = !!account;
 
-  const { balances } = useBalance({
-    address: addr,
-    multisig: true
-  });
+  const { balances } = useBalance({});
   const { records } = useRecords({filter});
 
-  const queryClient = new QueryClient();
   const wallet = async () => {
-    
+    if (isConnected) {
+      console.log(account);
+      return
+    };
     try {
       await connect();
       console.log(data);
@@ -46,14 +42,12 @@ function App() {
         console.log(account.address);
         setAddr(account.address.toString());
       }
-      
     }
     catch (err){
       console.log(err);
       console.log('no address');
     }
   }
-
 
   const Bal = async () => {    
     if (account){
@@ -103,30 +97,26 @@ function App() {
     }
   }
   
-  
-
   return (
     <div className="App">
-      <QueryClientProvider client={queryClient}>
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          
-          <a
-            className="App-link"
-            href="https://darksunlabs.medium.com"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Puzzle Connect
-          </a>
-          <br/>
-          <a onClick={wallet} style={{"cursor":'pointer'}}> What's the Wallet Address? </a>
-          <a onClick={Bal} style={{"cursor":'pointer'}}> How much balance? </a>
-          <a onClick={Records} style={{"cursor":'pointer'}}> What are my records like? </a>
-          <a onClick={EventCreate} style={{"cursor":'pointer'}}> Create Cypher Code in cypher_nm01 </a>
-          <a onClick={EventsGet} style={{"cursor":'pointer'}}> Get the Cypher Code Events </a>
-        </header>
-      </QueryClientProvider>
+      <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
+        
+        <a
+          className="App-link"
+          href="https://darksunlabs.medium.com"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Puzzle Connect
+        </a>
+        <br/>
+        <a onClick={wallet} style={{"cursor":'pointer'}}> What's the Wallet Address? </a>
+        <a onClick={Bal} style={{"cursor":'pointer'}}> How much balance? </a>
+        <a onClick={Records} style={{"cursor":'pointer'}}> What are my records like? </a>
+        <a onClick={EventCreate} style={{"cursor":'pointer'}}> Create Cypher Code in cypher_nm01 </a>
+        <a onClick={EventsGet} style={{"cursor":'pointer'}}> Get the Cypher Code Events </a>
+      </header>
     </div>
   );
 }
