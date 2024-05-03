@@ -9,6 +9,8 @@ import { useState } from 'react';
 
 function App() {
   const [addr, setAddr] = useState<string | ''>();
+  const [codeCount, setCodeCount] = useState('');
+
   type UseRecordsParams = {
     address?: string;
     multisig?: boolean;
@@ -103,6 +105,24 @@ function App() {
     }
   }
   
+
+  const CodesGet = async () => {
+    var acc = ''
+    if (account){
+      acc = account.address.toString();
+    }
+    console.log(acc);
+    fetch('https://node.puzzle.online/testnet3/program/cypher_nm01.aleo/mapping/code_count/'.concat(acc))
+    .then((res) => {
+      return res.json();
+    })
+    .then((data) => {
+      setCodeCount(data);
+    });
+      
+    console.log(codeCount);
+  }
+  
   
 
   return (
@@ -125,6 +145,7 @@ function App() {
           <a onClick={Records} style={{"cursor":'pointer'}}> What are my records like? </a>
           <a onClick={EventCreate} style={{"cursor":'pointer'}}> Create Cypher Code in cypher_nm01 </a>
           <a onClick={EventsGet} style={{"cursor":'pointer'}}> Get the Cypher Code Events </a>
+          <a onClick={CodesGet} style={{"cursor":'pointer'}}> How Many Cypher Codes Have I Created? </a>
         </header>
       </QueryClientProvider>
     </div>
