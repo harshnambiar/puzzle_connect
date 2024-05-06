@@ -11,10 +11,10 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <PuzzleWalletProvider
-      dAppName="unknown"
-      dAppDescription='unknown'
+      dAppName="Dark Sun Labs"
+      dAppDescription='Puzzle Wallet Demo for Dummies'
       dAppUrl='none'
-      dAppIconURL='none'
+      dAppIconURL='https://miro.medium.com/v2/resize:fill:96:96/0*qNUfzhNjoJQjGPKq'
     >
       <App />
     </PuzzleWalletProvider>
