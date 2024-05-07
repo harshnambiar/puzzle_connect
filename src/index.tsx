@@ -13,7 +13,7 @@ root.render(
     <PuzzleWalletProvider
       dAppName="Dark Sun Labs"
       dAppDescription='Puzzle Wallet Demo for Dummies'
-      dAppUrl='none'
+      dAppUrl='https://darksunlabs.medium.com/'
       dAppIconURL='https://miro.medium.com/v2/resize:fill:96:96/0*qNUfzhNjoJQjGPKq'
     >
       <App />
