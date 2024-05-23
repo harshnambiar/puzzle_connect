@@ -10,6 +10,7 @@ import { useState } from 'react';
 function App() {
   const [addr, setAddr] = useState<string | ''>();
   const [codeCount, setCodeCount] = useState('');
+  const [codeVal, setCodeVal] = useState('');
 
   type UseRecordsParams = {
     address?: string;
@@ -107,7 +108,7 @@ function App() {
   
 
   const CodesGet = async () => {
-    var acc = ''
+    var acc = '';
     if (account){
       acc = account.address.toString();
     }
@@ -119,8 +120,27 @@ function App() {
     .then((data) => {
       setCodeCount(data);
     });
-      
+    
     console.log(codeCount);
+  }
+
+  const CodeVal = async (i: number) => {
+    var acc = '';
+    if (account){
+      acc = account.address.toString();
+    }
+    const key = '%7B%20creator%3A%20'.concat(acc).concat('%2C%20cno%3A%20').concat(i.toString()).concat('u64%20%7D');
+    console.log(key);
+    fetch('https://node.puzzle.online/testnet3/program/cypher_nm01.aleo/mapping/codes/'.concat(key))
+    .then((res) => {
+      return res.json();
+    })
+    .then((data) => {
+      setCodeVal(data);
+    });
+      
+    console.log(codeVal);
+
   }
   
   
@@ -146,6 +166,7 @@ function App() {
           <a onClick={EventCreate} style={{"cursor":'pointer'}}> Create Cypher Code in cypher_nm01 </a>
           <a onClick={EventsGet} style={{"cursor":'pointer'}}> Get the Cypher Code Events </a>
           <a onClick={CodesGet} style={{"cursor":'pointer'}}> How Many Cypher Codes Have I Created? </a>
+          <a onClick={()=>CodeVal(3)} style={{"cursor":'pointer'}}> Get this Cypher Codes </a>
         </header>
       </QueryClientProvider>
     </div>
